@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reconocimiento de Imágenes CIFAR-10</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:600,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f2f5f7;
+            font-family: 'Montserrat', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 420px;
+            margin: 50px auto 0 auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+            padding: 38px 30px 30px 30px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.7em;
+            font-weight: 700;
+            color: #2d3a4b;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .subtitle {
+            color: #789;
+            font-size: 1em;
+            margin-bottom: 22px;
+        }
+        label.upload-btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background: linear-gradient(90deg, #439cfb 0%, #f187fb 100%);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 26px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 18px;
+        }
+        label.upload-btn:hover {
+            background: linear-gradient(90deg, #2e73be 0%, #c15ee6 100%);
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .preview-img {
+            margin: 22px auto 0 auto;
+            max-width: 170px;
+            max-height: 170px;
+            border-radius: 10px;
+            border: 2.5px solid #dedede;
+            box-shadow: 0 2px 8px #e0e7ef;
+            display: none;
+            background: #fff;
+        }
+        .resultado {
+            font-size: 1.2em;
+            margin-top: 25px;
+            background: #e8f3fe;
+            color: #26456d;
+            border-radius: 7px;
+            padding: 16px 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 5px #e8f2fa;
+            display: inline-block;
+        }
+        .submit-btn {
+            margin-top: 24px;
+            padding: 13px 36px;
+            background: linear-gradient(90deg, #439cfb 0%, #f187fb 100%);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 26px;
+            font-size: 1.1em;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px #e0e7ef;
+            outline: none;
+        }
+        .submit-btn:hover {
+            background: linear-gradient(90deg, #2e73be 0%, #c15ee6 100%);
+        }
+        .icon-upload {
+            vertical-align: middle;
+            margin-right: 7px;
+        }
+        @media (max-width: 540px) {
+            .container { max-width: 98vw; padding: 18px 2vw 20px 2vw; }
+            .preview-img { max-width: 90vw; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reconocimiento de Imágenes CIFAR-10</h1>
+        <div class="subtitle">Sube una imagen de un avión, auto, animal, barco o camión</div>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <label class="upload-btn">
+                <svg class="icon-upload" width="21" height="21" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12"/></svg>
+                Elegir imagen
+                <input type="file" name="imagen" accept="image/*" required onchange="previewImage(event)">
+            </label>
+            <br>
+            <img id="preview" class="preview-img" />
+            <br>
+            <button class="submit-btn" type="submit">Predecir</button>
+        </form>
+        {% if prediccion is not none %}
+            <div class="resultado">
+                <b>Predicción del modelo:</b> {{ prediccion | capitalize }}
+            </div>
+            <br>
+            <img src="{{ imagen_url }}" class="preview-img" style="display:inline-block">
+        {% endif %}
+    </div>
+<script>
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+        var output = document.getElementById('preview');
+        output.src = reader.result;
+        output.style.display = 'block';
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+</body>
+</html>
